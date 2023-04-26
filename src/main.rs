@@ -51,7 +51,7 @@ fn main() {
 
     unsafe {
         CONTEXT = Vec::with_capacity(43);
-        for _i in 0..2 {
+        for _i in 0..43 {
             CONTEXT.push(String::new());
         }
     }
