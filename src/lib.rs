@@ -1,5 +1,11 @@
+
+
 #[cfg(test)]
 mod test{
+    use std::{net::TcpStream, fs};
+
+    
+
     fn parse(){
         let test_data = 
             ["DATA_START  1, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 69.8 SOM Memory Available: 277368.0 SD Free Space: 6456.0 SOM Storage: 240072.0 SOM Time: Sat 13 Aug 2022 07:46:21 PM HKTDATA_END\r\nDATA_START  1, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 27.8 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 
@@ -28,6 +34,202 @@ mod test{
             26) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 27.7 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START 21, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 72.4 SOM Memory Available: 294200.0 SD Free Space: 6472.0 SOM Storage: 240556.0 SOM Time: Fri 22 Jul 2022 10:22:28 PM HKTDATA_END\r\nDATA_START 21, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 26.5 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 26.73 Set Temp: 25.00 RH: -26.1 T-Discharge: 83.4 T-Liquid: 82.6 T-Suction: 91.4 T-Ambient: 76.0 P-Discharge: 166.6 P-Suction: 166.6 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -5.2 Superheat: 14.0 ERRORS: WARN:High Ambient Temperature  (22 
             07 22 16 01) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 26.7 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""];
 
-            
+
+    }
+
+#[test]
+    fn test_output(){
+        use std::fs::File;
+        use std::io::Write;
+        //總數據
+    let data =["DATA_START  1, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 69.8 SOM Memory Available: 277368.0 SD Free Space: 6456.0 SOM Storage: 240072.0 SOM Time: Sat 13 Aug 2022 07:46:21 PM HKTDATA_END\r\nDATA_START  1, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 27.8 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 
+            0.00 EEV Steps: 0 T_CASE: 27.95 Set Temp: 25.00 RH: -26.1 T-Discharge: 85.0 T-Liquid: 81.0 T-Suction: 90.4 T-Ambient: 71.3 P-Discharge: 170.3 P-Suction: 170.9 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -1.9 Superheat: 11.4 ERRORS: WARN:High Discharge Temperature  (22 08 13 12 27) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 27.9 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START  2, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 76.6 SOM Memory Available: 281464.0 SD Free Space: 6457.0 SOM Storage: 241964.0 SOM Time: Sat 13 Aug 2022 09:23:23 PM HKTDATA_END\r\nDATA_START  2, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 26.8 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 26.74 Set Temp: 25.00 RH: -26.1 T-Discharge: 84.8 T-Liquid: 80.0 T-Suction: 89.9 T-Ambient: 71.8 P-Discharge: 170.5 P-Suction: 169.9 Compression Ratio: 1.0 Compressor Amps: 6.4 Bypass Steps: 72 SubCooling: -1.1 Superheat: 11.3 ERRORS: WARN:High Ambient Temperature  (22 08 13 12 53) TSD 
+            Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 26.7 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 
+            PWM: 0.0DATA_END\r\n\nDATA_START  3, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 98.7 SOM Memory Available: 316084.0 SD Free Space: 6609.0 SOM Storage: 237688.0 SOM Time: Wed 20 Jul 2022 10:45:18 PM HKTDATA_END\r\nDATA_START  3, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 25.8 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 25.73 Set Temp: 25.00 RH: -26.1 T-Discharge: 167.1 T-Liquid: 89.2 T-Suction: 17.3 T-Ambient: 76.8 P-Discharge: 195.3 P-Suction: 22.1 Compression Ratio: 5.7 Compressor Amps: 6.8 Bypass Steps: 151 SubCooling: -1.7 Superheat: 29.7 ERRORS: WARN:High Ambient Temperature  (22 07 20 14 13) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 1 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 22.4 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 
+            M1 FTC200 PWM: 0.0DATA_END\r\n\n\n\n\nDATA_START  7, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 61.0 SOM Memory Available: 346628.0 SD Free Space: 6572.0 SOM Storage: 241164.0 SOM Time: Sun 23 Oct 2022 12:29:50 PM HKTDATA_END\r\nDATA_START  7, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 28.0 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 27.95 Set Temp: 25.00 RH: -26.1 T-Discharge: 83.8 T-Liquid: 79.9 T-Suction: 88.6 T-Ambient: 73.4 P-Discharge: 167.7 P-Suction: 169.6 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -1.9 Superheat: 10.2 ERRORS: WARN:M1 No Cooling  (22 10 
+            23 06 10) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 27.9 M1 POWERBOX: 1 M1 FTC200 PV: 
+            0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START  8, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 81.3 SOM Memory Available: 301728.0 SD Free Space: 6566.0 SOM Storage: 239672.0 SOM Time: Sat 13 Aug 2022 10:46:18 PM HKTDATA_END\r\nDATA_START  8, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 27.0 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 26.83 Set Temp: 25.00 RH: -26.1 T-Discharge: 81.7 T-Liquid: 78.5 T-Suction: 85.3 T-Ambient: 72.4 P-Discharge: 162.7 P-Suction: 163.5 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -2.5 Superheat: 9.0 ERRORS: WARN:High Ambient Temperature 
+            (22 08 13 14 12) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 26.8 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START  9, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 75.4 SOM Memory Available: 294472.0 SD Free Space: 6560.0 SOM Storage: 238104.0 SOM Time: Sat 13 Aug 2022 10:12:34 PM HKTDATA_END\r\nDATA_START  9, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 26.6 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 26.54 Set Temp: 25.00 RH: -26.1 T-Discharge: 83.8 T-Liquid: 77.3 T-Suction: 80.6 T-Ambient: 71.6 P-Discharge: 165.3 P-Suction: 165.6 Compression Ratio: 1.0 Compressor Amps: 6.3 Bypass Steps: 72 SubCooling: -0.3 Superheat: 3.6 ERRORS: WARN:High Ambient Temperature  (22 08 13 13 44) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 26.5 M1 POWERBOX: 
+            1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\n\n\n\nDATA_START 13, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 74.7 SOM Memory Available: 294600.0 SD Free Space: 6552.0 SOM Storage: 236848.0 SOM Time: Sat 13 Aug 2022 09:55:26 PM HKTDATA_END\r\nDATA_START 13, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 26.7 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 26.72 Set Temp: 25.00 RH: -26.1 T-Discharge: 82.3 T-Liquid: 79.2 T-Suction: 88.4 T-Ambient: 72.8 P-Discharge: 162.6 P-Suction: 164.5 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -3.1 Superheat: 11.8 ERRORS: WARN:High Ambient Temperature  (22 08 13 13 20) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 26.7 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START 14, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 68.1 SOM Memory Available: 319212.0 SD Free Space: 6548.0 SOM Storage: 239872.0 SOM Time: Sat 13 Aug 2022 10:33:30 PM HKTDATA_END\r\nDATA_START 14, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 26.1 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 25.79 Set Temp: 25.00 RH: -26.1 T-Discharge: 82.6 T-Liquid: 77.6 T-Suction: 80.3 T-Ambient: 71.9 P-Discharge: 163.1 P-Suction: 163.7 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -1.5 Superheat: 4.0 ERRORS: WARN:High Ambient Temperature  (22 08 13 14 02) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 25.8 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START 15, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 65.0 SOM Memory Available: 319412.0 SD Free Space: 6573.0 SOM Storage: 235900.0 SOM Time: Sat 13 Aug 2022 10:35:16 PM HKTDATA_END\r\nDATA_START 15, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 24.5 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 24.48 Set Temp: 25.00 RH: -26.1 T-Discharge: 80.0 T-Liquid: 77.9 T-Suction: 85.8 T-Ambient: 73.0 P-Discharge: 159.2 P-Suction: 158.7 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -3.1 Superheat: 11.4 ERRORS: WARN:High Condensor Temp  (22 08 13 14 30) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 
+            25.0 PV: 24.5 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\n\n\n\nDATA_START 19, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 68.4 SOM Memory Available: 333104.0 SD Free Space: 6559.0 SOM Storage: 238276.0 SOM Time: Sat 13 Aug 2022 09:48:13 PM HKTDATA_END\r\nDATA_START 19, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 28.8 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 29.01 Set Temp: 25.00 RH: -26.0 T-Discharge: 83.4 T-Liquid: 79.3 T-Suction: 88.0 T-Ambient: 73.7 P-Discharge: 165.9 P-Suction: 165.5 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -2.2 Superheat: 11.1 ERRORS: WARN:High Ambient Temperature  (22 08 13 19 07) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 29.0 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START 20, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 67.0 SOM Memory Available: 260956.0 SD Free Space: 6569.0 SOM Storage: 240504.0 SOM Time: Sat 13 Aug 2022 10:19:44 PM HKTDATA_END\r\nDATA_START 20, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 27.1 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 27.05 Set Temp: 25.00 RH: -26.1 T-Discharge: 81.8 T-Liquid: 78.2 T-Suction: 86.9 T-Ambient: 72.3 P-Discharge: 163.3 P-Suction: 163.9 Compression Ratio: 1.0 Compressor Amps: 5.8 Bypass Steps: 72 SubCooling: 
+            -2.1 Superheat: 10.7 ERRORS: WARN:High Ambient Temperature  (22 08 13 13 46) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD 
+            Feedback: 0 Dynamic_SV: 25.0 PV: 27.1 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START 21, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 66.8 SOM Memory Available: 293932.0 SD Free Space: 6545.0 SOM Storage: 240656.0 SOM Time: Sat 13 Aug 2022 10:13:27 PM HKTDATA_END\r\nDATA_START 21, M1 STATUS (Up)  
+            FEEDBACK: T-CASE T_EVAP: 25.1 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 25.09 Set Temp: 25.00 RH: -26.1 T-Discharge: 79.7 T-Liquid: 76.4 T-Suction: 82.0 T-Ambient: 71.9 P-Discharge: 155.3 P-Suction: 156.6 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -3.4 Superheat: 8.4 ERRORS: WARN:High Ambient Temperature  (22 08 13 13 42) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 25.1 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END", "DATA_START  1, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 71.5 SOM Memory Available: 309468.0 SD Free Space: 6460.0 SOM Storage: 240328.0 SOM Time: Tue 11 Oct 2022 02:11:47 AM HKTDATA_END\r\nDATA_START  1, M1 STATUS 
+            (Up)  FEEDBACK: T-CASE T_EVAP: 28.1 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 28.21 Set Temp: 25.00 RH: -26.1 T-Discharge: 83.9 T-Liquid: 84.1 T-Suction: 91.6 T-Ambient: 76.1 P-Discharge: 175.1 P-Suction: 174.8 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 
+            72 SubCooling: -3.6 Superheat: 11.0 ERRORS: WARN:High Ambient Temperature  (22 10 10 19 57) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 28.2 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START  2, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 96.3 SOM Memory Available: 288500.0 SD Free Space: 6472.0 SOM Storage: 239212.0 SOM Time: Fri 22 Jul 2022 05:43:07 AM HKTDATA_END\r\nDATA_START  2, M1 STATUS(Up)  FEEDBACK: T-CASE T_EVAP: 27.8 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 27.82 Set Temp: 25.00 RH: -26.1 T-Discharge: 87.8 T-Liquid: 83.9 T-Suction: 92.4 T-Ambient: 75.6 P-Discharge: 175.8 P-Suction: 177.0 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -3.0 Superheat: 11.1 ERRORS: WARN:High Ambient Temperature  (22 07 21 23 42) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 27.8 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START  3, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 82.5 SOM Memory Available: 286816.0 SD Free Space: 6491.0 SOM Storage: 240044.0 SOM Time: Mon 08 Aug 2022 01:25:41 AM HKTDATA_END\r\nDATA_START  3, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 27.1 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 27.10 Set Temp: 25.00 RH: -26.1 T-Discharge: 86.3 T-Liquid: 82.7 T-Suction: 94.4 T-Ambient: 75.0 P-Discharge: 172.9 P-Suction: 174.7 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -2.8 Superheat: 14.0 ERRORS: WARN:High Ambient Temperature  (22 08 07 19 08) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 27.1 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\n\n\n\nDATA_START  7, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 71.3 SOM Memory Available: 338644.0 SD Free Space: 6547.0 SOM Storage: 237944.0 SOM Time: Wed 26 Apr 2023 03:00:56 PM HKTDATA_END\r\nDATA_START  7, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 28.6 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 28.73 Set Temp: 25.00 RH: -26.1 T-Discharge: 90.1 T-Liquid: 85.9 T-Suction: 96.6 T-Ambient: 75.8 P-Discharge: 181.8 P-Suction: 183.3 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -2.9 Superheat: 13.1 ERRORS: WARN:High Ambient Temperature  (23 04 26 10 45) TSD Millivolts: 0.00 TSD Temperature: 
+            NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 28.8 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START  
+            8, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 76.9 SOM Memory Available: 350780.0 SD Free Space: 6545.0 SOM Storage: 238592.0 SOM Time: Tue 02 Aug 2022 04:10:19 AM HKTDATA_END\r\nDATA_START  8, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 27.8 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 27.96 Set Temp: 25.00 RH: -26.1 T-Discharge: 90.0 T-Liquid: 84.8 T-Suction: 98.9 T-Ambient: 75.2 P-Discharge: 184.0 P-Suction: 183.7 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -0.9 Superheat: 15.2 ERRORS: WARN:High Ambient Temperature  (22 08 02 02 03) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 27.9 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START  9, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 73.0 SOM Memory Available: 297872.0 SD Free Space: 6474.0 SOM Storage: 240752.0 SOM Time: Sat 23 Jul 2022 07:49:18 AM HKTDATA_END\r\nDATA_START  9, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 27.0 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 
+            EEV Steps: 0 T_CASE: 26.99 Set Temp: 25.00 RH: -26.1 T-Discharge: 88.1 T-Liquid: 82.6 T-Suction: 84.5 T-Ambient: 75.2 P-Discharge: 173.2 P-Suction: 174.7 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -2.7 Superheat: 3.9 ERRORS: WARN:High Ambient Temperature  (22 07 23 05 19) TSD Millivolts: 0.00 
+            TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 27.0 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\n\n\n\n\nDATA_START 14, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 74.1 SOM Memory Available: 352352.0 SD Free Space: 7993.0 SOM Storage: 239924.0 SOM Time: Wed 26 Apr 2023 11:04:38 AM HKTDATA_END\r\nDATA_START 14, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 27.1 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 27.08 Set Temp: 25.00 RH: -26.1 T-Discharge: 77.3 T-Liquid: 75.6 T-Suction: 75.5 T-Ambient: 74.2 P-Discharge: 153.2 P-Suction: 154.8 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -3.0 Superheat: 2.6 ERRORS: WARN:M1 No Cooling  (23 04 26 03 27) TSD Millivolts: 
+            0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 27.1 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START 15, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 80.2 SOM Memory Available: 331880.0 SD Free Space: 6425.0 SOM Storage: 238028.0 SOM Time: Mon 01 Aug 2022 08:48:59 PM HKTDATA_END\r\nDATA_START 15, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 25.8 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 25.79 Set Temp: 25.00 RH: -26.1 T-Discharge: 83.8 T-Liquid: 82.1 T-Suction: 91.1 T-Ambient: 75.4 P-Discharge: 165.0 P-Suction: 167.5 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -5.2 Superheat: 13.4 ERRORS: WARN:High Ambient Temperature  (22 08 01 17 25) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 25.8 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\n\n\n\nDATA_START 19, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 74.0 SOM Memory Available: 307956.0 SD Free Space: 6442.0 SOM Storage: 242276.0 
+            SOM Time: Wed 16 Nov 2022 06:33:50 PM HKTDATA_END\r\nDATA_START 19, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 28.3 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: 
+            DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 28.25 Set Temp: 25.00 RH: -26.1 T-Discharge: 88.6 T-Liquid: 84.9 T-Suction: 86.6 T-Ambient: 76.6 P-Discharge: 177.6 P-Suction: 178.6 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -3.3 Superheat: 4.9 ERRORS: WARN:M1 SS Target  (22 11 16 12 37) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 28.2 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START 20, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 87.2 SOM Memory Available: 311092.0 SD Free Space: 6505.0 SOM Storage: 239944.0 SOM 
+            Time: Tue 26 Jul 2022 09:40:12 PM HKTDATA_END\r\nDATA_START 20, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 27.7 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 27.65 Set Temp: 25.00 RH: -26.1 T-Discharge: 88.4 T-Liquid: 84.1 T-Suction: 93.9 T-Ambient: 76.1 P-Discharge: 176.3 P-Suction: 177.9 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -2.8 Superheat: 12.3 ERRORS: WARN:High Ambient Temperature  (22 07 26 15 
+            26) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 27.7 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END\r\n\nDATA_START 21, SOM STATUS:\nSW Version:CC 21.8.23.1 CPU: 72.4 SOM Memory Available: 294200.0 SD Free Space: 6472.0 SOM Storage: 240556.0 SOM Time: Fri 22 Jul 2022 10:22:28 PM HKTDATA_END\r\nDATA_START 21, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 26.5 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 26.73 Set Temp: 25.00 RH: -26.1 T-Discharge: 83.4 T-Liquid: 82.6 T-Suction: 91.4 T-Ambient: 76.0 P-Discharge: 166.6 P-Suction: 166.6 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -5.2 Superheat: 14.0 ERRORS: WARN:High Ambient Temperature  (22 
+            07 22 16 01) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 26.7 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""];
+
+    let mut output = String::new();
+    for i in data {
+        if i.len() < 10 { // 跳過空內容
+            continue;
+        }
+        
+        output.push_str(crate::parse_handler(i).as_str());
+        output.push_str("\n");
+    }
+
+    // println!("{output}");
+
+   
+
+    // 将数据写入文件 output.csv
+    let mut file = File::create("output.csv").unwrap();
+    file.write_all(output.as_bytes()).unwrap();
+
+
+    }
+
+
+    /// 檢測哪些連接不上的, 然後輸出一個批處理文件用來自重啟,重啟時間為10秒
+    #[test]
+    fn test_connect() {
+        let mut output = String::new();
+        for id in 1..=43{
+           match TcpStream::connect(format!("10.10.2.{}:6666", id)){
+                Ok(stream)=>(),
+                Err(e)=>{
+                    println!("CONNECT FAIL ID: {id}");
+                    output.push_str(format!(r#"copy /y "\\10.10.2.{id}\3200\3200 ver\file-watch\file-watch.exe" "\\10.10.2.{id}\3200\3200 ver\file-watch\update""#).as_str());
+                    output.push('\n');
+                },
+           }
+        }
+        // output to restart_filewatch.bat
+        fs::write("restart_filewatch.bat", output);
     }
 }
+
+
+
+
+
+/// handler 解析24個site
+pub fn parse_handler(data:&str) -> String{
+    let data3:Vec<&str> = data.split("PWM").collect(); 
+        let title = format!("DATA_START,SOM STATUS,SW Version,CPU,SOM Memory Available,SD Free Space,SOM Storage,SOM Time,FEEDBACK,T_EVAP,UP_SENSOR,DOWN_SENSOR,HEAD_STATE,HEATER POWER,EEV Steps,T_CASE,Set Temp,RH,T-Discharge,T-Liquid,T-Suction,T-Ambient,P-Discharge,P-Suction,Compression Ratio,Compressor Amps,Bypass Steps,SubCooling,Superheat,ERRORS,WARN,TSD Millivolts,TSD Temperature,M1 T-CASE OFFSET,Power On Off,TSD Feedback,Dynamic_SV,PV,M1 POWERBOX,PV");
+
+ 
+     let mut output = title.replace("DATA_START", "SITE");
+        output.push('\n');
+    for i in data3{
+        output.push_str( parse_site( &i.to_string()).as_str());
+        output.push_str("\n");
+    }
+    // parse_site( &data3[0].to_string());
+    output
+}
+/// site 解析數據字段
+ fn parse_site(raw_str: &String)-> String{
+ // let raw_str = &data3[0].to_string();
+                /* 
+                DATA_START 20, SOM STATUS:
+        SW Version:CC 21.8.23.1 CPU: 67.0 SOM Memory Available: 260956.0 SD Free Space: 6569.0 SOM Storage: 240504.0 SOM Time: Sat 13 Aug 2022 10:19:44 PM HKTDATA_END
+        DATA_START 20, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 27.1 UP_SENSOR: FALSE DOWN_SENSOR: FALSE HEAD_STATE: DISABLED HEATER POWER: 0.00 EEV Steps: 0 T_CASE: 27.05 Set Temp: 25.00 RH: -26.1 T-Discharge: 81.8 T-Liquid: 78.2 T-Suction: 86.9 T-Ambient: 72.3 P-Discharge: 163.3 P-Suction: 163.9 Compression Ratio: 1.0 Compressor Amps: 5.8 Bypass Steps: 72 SubCooling:
+                    -2.1 Superheat: 10.7 ERRORS: WARN:High Ambient Temperature  (22 08 13 13 46) TSD Millivolts: 0.00 TSD Temperature: NaN M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD
+                    Feedback: 0 Dynamic_SV: 25.0 PV: 27.1 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 PWM: 0.0DATA_END
+        */
+       
+        /* let site = find_str(raw_str, "DATA_START", ",").trim();
+        let sw_version = find_str(raw_str, "SW Version:", "CPU:").trim();
+        let cpu = find_str(raw_str, "CPU:", "SOM Memory Available:").trim();
+        let som_memory_available = find_str(raw_str, "SOM Memory Available:", "SD Free Space:").trim();
+        let sd_free_space = find_str(raw_str, "SD Free Space:", "SOM Storage:").trim();
+        let som_storage = find_str(raw_str, "SOM Storage:", "SOM Time:").trim();
+        let som_time = find_str(raw_str, "SOM Time:", "DATA_END").trim();
+        
+        let feedback = find_str(raw_str, "FEEDBACK:", "T_EVAP:").trim();
+        let t_evap = find_str(raw_str, "T_EVAP:", "UP_SENSOR:").trim();
+        let up_sensor = find_str(raw_str, "UP_SENSOR:", "DOWN_SENSOR:").trim();
+        let down_sensor = find_str(raw_str, "DOWN_SENSOR:", "HEAD_STATE:").trim();
+        let head_state = find_str(raw_str, "HEAD_STATE:", "HEATER POWER:").trim();
+        let heater_power = find_str(raw_str, "HEATER POWER:", "EEV Steps:").trim();
+        let eev_steps = find_str(raw_str, "EEV Steps:", "T_CASE:").trim();
+        let t_case = find_str(raw_str, "T_CASE:", "Set Temp:").trim();
+        let set_temp = find_str(raw_str, "Set Temp:", "RH:").trim();
+        let rh = find_str(raw_str, "RH:", "T-Discharge:").trim();
+        let t_discharge = find_str(raw_str, "T-Discharge:", "T-Liquid:").trim();
+        let t_liquid = find_str(raw_str, "T-Liquid:", "T-Suction:").trim();
+        let t_suction = find_str(raw_str, "T-Suction:", "T-Ambient:").trim();
+        let t_ambient = find_str(raw_str, "T-Ambient:", "P-Discharge:").trim();
+        let p_discharge = find_str(raw_str, "P-Discharge:", "P-Suction:").trim();
+        let p_suction = find_str(raw_str, "P-Suction:", "Compression Ratio:").trim();
+        let compression_ratio = find_str(raw_str, "Compression Ratio:", "Compressor Amps:").trim();
+        let compressor_amps = find_str(raw_str, "Compressor Amps:", "Bypass Steps:").trim();
+        let bypass_steps = find_str(raw_str, "Bypass Steps:", "SubCooling:").trim();
+        let subcooling = find_str(raw_str, "SubCooling:", "Superheat:").trim();
+        let superheat = find_str(raw_str, "Superheat:", "ERRORS:").trim();
+        let errors = find_str(raw_str, "ERRORS:", "WARN:").trim();
+        let warn = find_str(raw_str, "WARN:", "TSD Millivolts:").trim();
+        let tsd_millivolts = find_str(raw_str, "TSD Millivolts:", "TSD Temperature:").trim();
+        let tsd_temperature = find_str(raw_str, "TSD Temperature:", "M1 T-CASE OFFSET:").trim();
+        let m1_t_case_offset = find_str(raw_str, "M1 T-CASE OFFSET:", "Power On Off:").trim();
+        let power_on_off = find_str(raw_str, "Power On Off:", "TSD Feedback:").trim();
+        let tsd_feedback = find_str(raw_str, "TSD Feedback:", "Dynamic_SV:").trim();
+        let dynamic_sv = find_str(raw_str, "Dynamic_SV:", "PV:").trim();
+        let pv = find_str(raw_str, "PV:", "M1 POWERBOX:").trim();
+        let m1_powerbox = find_str(raw_str, "M1 POWERBOX:", "PV:").trim(); */
+        //SOM Time,FEEDBACK 兩個東西之間的東西直接忽略
+        let title = format!("DATA_START,SOM STATUS,SW Version,CPU,SOM Memory Available,SD Free Space,SOM Storage,SOM Time,FEEDBACK,T_EVAP,UP_SENSOR,DOWN_SENSOR,HEAD_STATE,HEATER POWER,EEV Steps,T_CASE,Set Temp,RH,T-Discharge,T-Liquid,T-Suction,T-Ambient,P-Discharge,P-Suction,Compression Ratio,Compressor Amps,Bypass Steps,SubCooling,Superheat,ERRORS,WARN,TSD Millivolts,TSD Temperature,M1 T-CASE OFFSET,Power On Off,TSD Feedback,Dynamic_SV,PV,M1 POWERBOX,PV");
+        let title_vec = title.split(",").collect::<Vec<&str>>();
+        let mut data_vec = Vec::new();
+        for i in 0..title_vec.len()-1{
+            
+            match title_vec[i]{
+                "DATA_START" => {
+                    data_vec.push(find_str(raw_str, "DATA_START",",").trim());
+                },
+                "SOM Time" => {
+                    data_vec.push(find_str(raw_str, "SOM Time:","DATA_END").trim());
+                },
+              /*   "WARN" => {
+                    data_vec.push(find_str(raw_str, "WARN:","TSD").trim());
+                },
+                "TSD Millivolts" => {
+                    data_vec.push(find_str(raw_str, "Millivolts:","TSD").trim());
+                },
+                "Power On Off" =>{
+                    data_vec.push(find_str(raw_str, "Power On Off:","TSD").trim());
+                } */
+                _ => {
+                    data_vec.push(find_str(raw_str, format!("{}:",title_vec[i]).as_str(), title_vec[i+1].split(" ").collect::<Vec<&str>>()[0]).trim());
+                }
+            }
+    
+        }
+        /* ["1", "", "CC 21.8.23.1", "69.8", "277368.0", "6456.0", "240072.0", ": Sat 13 Aug 2022 07:46:21 PM HKT", "T-CASE", "27.8", "FALSE", "FALSE", "DISABLED", "0.00", "0", "27.95", "25.00", "-26.1", "85.0", "81.0", "90.4", "71.3", "170.3", "170.9", "1.0", "0.1", "72", "-1.9", "11.4", "", "High Discharge Temperature  (22 08 13 12 27)", "0.00", "NaN", "0.00", "0", "0", "25.0", "27.9", "1 M1 FTC200"] */
+        // println!("{:?}",data_vec);
+
+       let mut output = String::new();
+        output.push_str(data_vec.join(",").as_str());
+        // println!("{}",output);
+        /* SITE,SOM STATUS,SW Version,CPU,SOM Memory Available,SD Free Space,SOM Storage,SOM Time,FEEDBACK,T_EVAP,UP_SENSOR,DOWN_SENSOR,HEAD_STATE,HEATER POWER,EEV Steps,T_CASE,Set Temp,RH,T-Discharge,T-Liquid,T-Suction,T-Ambient,P-Discharge,P-Suction,Compression Ratio,Compressor Amps,Bypass Steps,SubCooling,Superheat,ERRORS,WARN,TSD Millivolts,TSD Temperature,M1 T-CASE OFFSET,Power On Off,TSD Feedback,Dynamic_SV,PV,M1 POWERBOX,PV
+1,,CC 21.8.23.1,69.8,277368.0,6456.0,240072.0,: Sat 13 Aug 2022 07:46:21 PM HKT,T-CASE,27.8,FALSE,FALSE,DISABLED,0.00,0,27.95,25.00,-26.1,85.0,81.0,90.4,71.3,170.3,170.9,1.0,0.1,72,-1.9,11.4,,High Discharge Temperature  (22 08 13 12 27),0.00,NaN,0.00,0,0,25.0,27.9,1 M1 FTC200 */
+    output
+}
+
+fn find_str<'a>(raw: &'a String, s1: &str, s2: &str) -> &'a str {
+        //println!("raw: {:?} \n find: {:?},{:?}", raw,s1,s2);
+        let p1 = if let Some(v) = raw.find(s1) {
+            v + s1.len()
+        } else {
+            return "";
+        };
+        let p2 = match raw[p1..].find(s2) {
+            Some(p2) => p2,
+            None => p1 + 0,
+        };
+
+        // println!("raw: {:?} \n find: {:?} {:?},{:?} {:?}  len: {}", raw,s1, p1,s2,p2,p1 + s1.len());
+        &raw[p1..p2 + p1]
+    }
+
