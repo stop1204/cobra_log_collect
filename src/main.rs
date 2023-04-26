@@ -40,6 +40,7 @@ use std::{
 };
 
 static mut CONTEXT: Vec<String> = Vec::new();
+static mut CONTEXT_TOTAL: Vec<String> = Vec::new(); //用來輸出所有數據, 因為上面那個CONTEXT會在輸出時候清空
 static mut TASKS: usize = 0;
 
 fn main() {
@@ -51,8 +52,10 @@ fn main() {
 
     unsafe {
         CONTEXT = Vec::with_capacity(43);
+        CONTEXT_TOTAL = Vec::with_capacity(43);
         for _i in 0..43 {
             CONTEXT.push(String::new());
+            CONTEXT_TOTAL.push(String::new());
         }
     }
     // 連接到ip 10.10.2.2 , 然後發送命令 "send cobra", 之後等待返回的消息, 連接timeout 1分鐘
@@ -88,6 +91,7 @@ fn main() {
             for i in 0..43 {
                     if !&CONTEXT[i].is_empty() {
                         let tmp = CONTEXT[i].clone();
+                        CONTEXT_TOTAL[i].push_str(&tmp);
                         &CONTEXT[i].clear();
                         output2(&tmp, i + 61);
                     }
@@ -98,7 +102,7 @@ fn main() {
         // println!("{CONTEXT:?}\nTASKS: {TASKS} / {destination}");
     }
 
-    // output(unsafe { &CONTEXT });
+    output(unsafe { &CONTEXT_TOTAL });
 }
 
 /// 檢測是否連接到 沒連接到則創建bat文件
