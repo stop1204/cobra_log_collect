@@ -81,14 +81,18 @@ fn main() {
                 wait_timeout = 0;
                 println!("TASKS: {TASKS} / {destination}");
 
-                for i in 0..43 {
-                    if !&CONTEXT[i].is_empty() {
-                        output2(&CONTEXT[i], i + 61);
-                    }
-                }
+                
             }
             wait_timeout += 1;
             println!("tick {wait_timeout}");
+            for i in 0..43 {
+                    if !&CONTEXT[i].is_empty() {
+                        let tmp = CONTEXT[i].clone();
+                        &CONTEXT[i].clear();
+                        output2(&tmp, i + 61);
+                    }
+                }
+
         }
 
         // println!("{CONTEXT:?}\nTASKS: {TASKS} / {destination}");
@@ -115,7 +119,12 @@ fn test_connect() {
     }
 fn connect(id: usize) {
     println!("10.10.2.{}:6666", id);
-    let mut stream = TcpStream::connect(format!("10.10.2.{}:6666", id)).unwrap();
+    let mut stream = if let Ok(stream)= TcpStream::connect(format!("10.10.2.{}:6666", id)){
+        stream
+    }else{
+        println!("ConnectionRefused");
+        return;
+    };
     stream
         .set_read_timeout(Some(std::time::Duration::from_secs(30)))
         .unwrap();

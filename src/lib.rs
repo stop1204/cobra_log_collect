@@ -122,7 +122,7 @@ pub fn parse_handler(data:&str) -> String{
      let mut output = title.replace("DATA_START", "SITE");
         output.push('\n');
     for i in data3{
-        output.push_str( parse_site( &i.to_string()).as_str());
+        output.push_str( parse_site( &i.to_string().replace("\n", " ")).as_str());
         output.push_str("\n");
     }
     // parse_site( &data3[0].to_string());
@@ -184,6 +184,14 @@ pub fn parse_handler(data:&str) -> String{
         let mut data_vec = Vec::new();
         for i in 0..title_vec.len()-1{
             
+            /* 
+            raw: ": 0.0DATA_END\r  DATA_START 22, SOM STATUS: SW Version:CC 21.8.23.1 CPU: 62.6 SOM Memory Available: 296236.0 SD Free Space: 6333.0 SOM Storage: 236756.0 SOM Time: Wed 26 Apr 2023 03:59:28 PM HKTDATA_END\r DATA_START 22, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 28.9 UP_SENSOR: TRUE DOWN_SENSOR: TRUE HEAD_STATE: RUN HEATER POWER: 0.00 EEV Steps: 100 T_CASE: 28.64 Set Temp: 25.00 RH: -26.1 T-Discharge: 76.4 T-Liquid: 76.6 T-Suction: 76.0 T-Ambient: 72.8 P-Discharge: 150.9 P-Suction: 151.7 Compression Ratio: 1.0 Compressor Amps: 4.2 Bypass Steps: 72 SubCooling: -5.2 Superheat: 4.2 ERRORS: NONE TSD Millivolts: 0.00 TSD Temperature: 22.62 M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 28.6 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 "
+ find: "ERRORS:" 589,"WARN" 589  len: 596
+raw: ": 0.0DATA_END\r  DATA_START 23, SOM STATUS: SW Version:CC 21.8.23.1 CPU: 66.5 SOM Memory Available: 308412.0 SD Free Space: 6427.0 SOM Storage: 239640.0 SOM Time: Wed 26 Apr 2023 03:58:27 PM HKTDATA_END\r DATA_START 23, M1 STATUS (Up)  FEEDBACK: T-CASE T_EVAP: 27.2 UP_SENSOR: TRUE DOWN_SENSOR: TRUE HEAD_STATE: RUN HEATER POWER: 0.00 EEV Steps: 100 T_CASE: 27.19 Set Temp: 25.00 RH: -26.1 T-Discharge: 76.3 T-Liquid: 76.7 T-Suction: 77.0 T-Ambient: 72.3 P-Discharge: 150.5 P-Suction: 153.1 Compression Ratio: 1.0 Compressor Amps: 0.1 Bypass Steps: 72 SubCooling: -5.5 Superheat: 4.6 TSD Millivolts: 0.00 TSD Temperature: 21.48 M1 T-CASE OFFSET: 0.00 Power On Off: 0 TSD Feedback: 0 Dynamic_SV: 25.0 PV: 27.2 M1 POWERBOX: 1 M1 FTC200 PV: 0.0 M1 FTC200 "
+ find: "Superheat:" 577,"ERRORS" 577  len: 587
+  */
+            // 有時候 Superheat 後面會沒有 ERRORS 數據塊
+            // 有時候 ERRORS 後面是 Warning 數據塊
             match title_vec[i]{
                 "DATA_START" => {
                     data_vec.push(find_str(raw_str, "DATA_START",",").trim());
@@ -200,6 +208,9 @@ pub fn parse_handler(data:&str) -> String{
                 "Power On Off" =>{
                     data_vec.push(find_str(raw_str, "Power On Off:","TSD").trim());
                 } */
+                "M1 POWERBOX"=>{
+                    data_vec.push(find_str(raw_str, "POWERBOX:","PV").trim());
+                }
                 _ => {
                     data_vec.push(find_str(raw_str, format!("{}:",title_vec[i]).as_str(), title_vec[i+1].split(" ").collect::<Vec<&str>>()[0]).trim());
                 }
@@ -229,7 +240,12 @@ fn find_str<'a>(raw: &'a String, s1: &str, s2: &str) -> &'a str {
             None => p1 + 0,
         };
 
-        // println!("raw: {:?} \n find: {:?} {:?},{:?} {:?}  len: {}", raw,s1, p1,s2,p2,p1 + s1.len());
+        if (p2 + p1)>=  raw.len() {
+       println!("raw: {:?} \n find: {:?} {:?},{:?} {:?}  len: {}", raw,s1, p1,s2,p2,p1 + s1.len());
+            return "";
+        }
+        
+        
         &raw[p1..p2 + p1]
     }
 
