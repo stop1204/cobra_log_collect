@@ -83,20 +83,17 @@ fn main() {
                 wait_tasks = TASKS;
                 wait_timeout = 0;
                 println!("TASKS: {TASKS} / {destination}");
-
-                
             }
             wait_timeout += 1;
             println!("tick {wait_timeout}");
             for i in 0..43 {
-                    if !&CONTEXT[i].is_empty() {
-                        let tmp = CONTEXT[i].clone();
-                        CONTEXT_TOTAL[i].push_str(&tmp);
-                        &CONTEXT[i].clear();
-                        output2(&tmp, i + 61);
-                    }
+                if !&CONTEXT[i].is_empty() {
+                    let tmp = CONTEXT[i].clone();
+                    CONTEXT_TOTAL[i].push_str(&tmp);
+                    &CONTEXT[i].clear();
+                    output2(&tmp, i + 61);
                 }
-
+            }
         }
 
         // println!("{CONTEXT:?}\nTASKS: {TASKS} / {destination}");
@@ -107,25 +104,25 @@ fn main() {
 
 /// 檢測是否連接到 沒連接到則創建bat文件
 fn test_connect() {
-        let mut output = String::new();
-        for id in 1..=43{
-           match TcpStream::connect(format!("10.10.2.{}:6666", id)){
-                Ok(stream)=>(),
-                Err(e)=>{
-                    println!("CONNECT FAIL ID: {id}");
-                    output.push_str(format!(r#"copy /y "\\10.10.2.{id}\3200\3200 ver\file-watch\file-watch.exe" "\\10.10.2.{id}\3200\3200 ver\file-watch\update""#).as_str());
-                    output.push('\n');
-                },
-           }
+    let mut output = String::new();
+    for id in 1..=43 {
+        match TcpStream::connect(format!("10.10.2.{}:6666", id)) {
+            Ok(stream) => (),
+            Err(e) => {
+                println!("CONNECT FAIL ID: {id}");
+                output.push_str(format!(r#"copy /y "\\10.10.2.{id}\3200\3200 ver\file-watch\file-watch.exe" "\\10.10.2.{id}\3200\3200 ver\file-watch\update""#).as_str());
+                output.push('\n');
+            }
         }
-        // output to restart_filewatch.bat
-        std::fs::write("restart_filewatch.bat", output);
     }
+    // output to restart_filewatch.bat
+    std::fs::write("restart_filewatch.bat", output);
+}
 fn connect(id: usize) {
     println!("10.10.2.{}:6666", id);
-    let mut stream = if let Ok(stream)= TcpStream::connect(format!("10.10.2.{}:6666", id)){
+    let mut stream = if let Ok(stream) = TcpStream::connect(format!("10.10.2.{}:6666", id)) {
         stream
-    }else{
+    } else {
         println!("ConnectionRefused");
         return;
     };
@@ -196,8 +193,8 @@ fn output2(data: &String, id: usize) {
         return;
     }
 
-    output.push_str(format!("HSLTN {} ", id + 61).as_str());
-    output.push_str("\n");
+    /*   output.push_str(format!("HSLTN {} ", id ).as_str());
+    output.push_str("\n"); */
     output.push_str(cobra_log_collect::parse_handler(data.as_str()).as_str());
     output.push_str("\n");
 
