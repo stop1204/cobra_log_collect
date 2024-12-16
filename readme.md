@@ -1,5 +1,3 @@
-# README.md
-
 ## Log File Parsing and Export Utility
 
 **Purpose:**  
