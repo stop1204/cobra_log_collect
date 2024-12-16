@@ -1,0 +1,15 @@
+1.使用Cobra_log_detect檢查一下機台的port 6666 通訊
+2.完成後會在桌面生成restart_filewatch.bat, 運行它,然後等待10秒,再次重複第一個步驟
+	直到確認所有通訊都有連接到,然後執行第3步. (如果通訊都正常,那麼執行第一步的時候會直接關閉窗口而沒有任何提示,並且無法運行restart_filewatch.bat)
+
+
+3.執行 cobra_log_collect.exe
+4.執行完畢會在當前目錄下生成每個機台所有可連接到的Cobra的當前數據.
+	output65.csv	 代表 65號機台
+	SITE		代表 IP 的ID  192.168.0.SITE (用來區分Dual Head 和 Single Head)  
+
+
+
+
+
+單獨生成文件是防止一些意外狀況
